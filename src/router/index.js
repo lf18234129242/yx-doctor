@@ -127,6 +127,16 @@ export default new Router({
       }
     },
     {
+      path: '/SubSuccess',
+      name: 'SubSuccess',
+      component: loadView('SubSuccess'),
+      meta:{
+        index:4,
+        auth:true,
+        title:'提交成功'
+      }
+    },
+    {
       path: '/QuestionList',
       name: 'QuestionList',
       component: loadView('QuestionList'),

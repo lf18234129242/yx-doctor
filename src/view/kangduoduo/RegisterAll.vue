@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { yinxing, duoduo } from "@/utils/http"
+import { yinxing } from "@/utils/http"
 import { getStrParam, XSSReg } from "@/utils/count";
 export default {
   name: 'RegisterAll',
@@ -70,7 +70,7 @@ export default {
       token: "",
       userId: "",
       doctorId: "",
-      myIntegral: "",
+      // myIntegral: "",
     };
   },
   mounted() {
@@ -122,17 +122,17 @@ export default {
       }).then(res => {
         if (res.data.code === 0) {
           // this.getTotalIntegral()
-					this.myIntegral = res.data.totalIntegral
-					if (this.myIntegral < 20) {
-						this.$router.push({
-							path: '/Share',
-							query: {
-                userId: this.userId,
-                doctorId: this.doctorId,
-                token: this.token
-							}
-						})
-					} else {
+					// this.myIntegral = res.data.totalIntegral
+					// if (this.myIntegral < 20) {
+						// this.$router.push({
+						// 	path: '/Share',
+						// 	query: {
+            //     userId: this.userId,
+            //     doctorId: this.doctorId,
+            //     token: this.token
+						// 	}
+						// })
+					// } else {
             this.$router.push({
               path: "/SubmitTheIllness",
               query: {
@@ -141,36 +141,36 @@ export default {
                 doctorId: this.doctorId
               }
             })
-          }
+          // }
         }
       })
     },
-		getTotalIntegral() {
-			duoduo.getTotalIntegral({token: this.token}).then(res => {
-				if (res.data.code === 0) {
-					this.myIntegral = res.data.totalIntegral
-					if (this.myIntegral < 20) {
-						this.$router.push({
-							path: '/Share',
-							query: {
-                userId: this.userId,
-                doctorId: this.doctorId,
-                token: this.token
-							}
-						})
-					} else {
-            this.$router.push({
-              path: "/SubmitTheIllness",
-              query: {
-                token: this.token,
-                userId: this.userId,
-                doctorId: this.doctorId
-              }
-            })
-          }
-				}
-			})
-		},
+		// getTotalIntegral() {
+		// 	duoduo.getTotalIntegral({token: this.token}).then(res => {
+		// 		if (res.data.code === 0) {
+		// 			this.myIntegral = res.data.totalIntegral
+		// 			if (this.myIntegral < 20) {
+		// 				this.$router.push({
+		// 					path: '/Share',
+		// 					query: {
+    //             userId: this.userId,
+    //             doctorId: this.doctorId,
+    //             token: this.token
+		// 					}
+		// 				})
+		// 			} else {
+    //         this.$router.push({
+    //           path: "/SubmitTheIllness",
+    //           query: {
+    //             token: this.token,
+    //             userId: this.userId,
+    //             doctorId: this.doctorId
+    //           }
+    //         })
+    //       }
+		// 		}
+		// 	})
+		// },
     selectSex() {
       this.show_sex = true;
     },

@@ -18,24 +18,32 @@
 				>
 			</div>
 		</div>
-		<van-button round class="put_question_again" @click="putQuestionAgain">追加提问</van-button>
-		<footer>
-			<h3>温馨提示</h3>
-			<li>1.提交详细信息，医生可以给更准确的回复</li>
-			<li>2.该服务是医生利用空闲时间进行的免费帮忙</li>
-			<li>3.本服务为免费帮忙，内容仅供参考，如具体病情请及时前往门诊就医。</li>
-		</footer>
+
+		<DispensingOnline>
+			<van-button round class="put_question_again" @click="putQuestionAgain">追加提问</van-button>
+			<footer>
+				<h3>温馨提示</h3>
+				<li>1.提交详细信息，医生可以给更准确的回复</li>
+				<li>2.该服务是医生利用空闲时间进行的免费帮忙</li>
+				<li>3.本服务为免费帮忙，内容仅供参考，如具体病情请及时前往门诊就医。</li>
+			</footer>
+		</DispensingOnline>
 	</div>
 </template>
 
 <script>
 import { duoduo } from "@/utils/http"
 import { ImagePreview } from 'vant'
+import DispensingOnline from './../components/DispensingOnline'
+
 function scrollY () {
 	return window.pageYOffset || window.document.documentElement.scrollTop
 }
 export default {
 	name: 'Chating',
+	components: {
+		DispensingOnline
+	},
   data() {
     return {
 			questionInfoList: [],
@@ -156,7 +164,7 @@ export default {
 		}
 	}
 	.put_question_again{
-		width:8.4rem;
+		width 8.4rem
 		height:1.76rem;
 		background:linear-gradient(90deg,rgba(0,181,140,1) 0%,rgba(0,104,82,1) 99%);
 		box-shadow:0px .1rem .2rem 0px rgba(0,106,84,0.3);

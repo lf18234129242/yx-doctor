@@ -90,7 +90,6 @@ export default {
 				consultId: this.consultId,
 				diseaseImgs: fileStr,
 				doctorId: this.doctorId,
-				// integral: this.integral,
 				sickDesc: illness_desc,
 				token: this.token
 			}
@@ -100,12 +99,12 @@ export default {
 					this.illness_desc = ''
 					this.fileArr = []
 					this.$router.push({
-						path: '/QuestionList', 
+						path: '/SubSuccess', 
 						query: {
 							token: this.token,
 							userId: this.userId,
 							doctorId: this.doctorId,
-							openModel: true
+							// openModel: true
 						}
 					})
 				}
@@ -113,17 +112,13 @@ export default {
 		},
     // 上传图片
     afterRead(file) {
-			// let images = '', imageArr = []
 			if (Array.isArray(file)) {
 				file.forEach(item => {
 					this.reduceImg(item)
 				})
-				// images = imageArr.toString
 			} else {
 				this.reduceImg(file)
 			}
-      // file.status = 'uploading'
-      // file.message = '上传中...'
       Toast.loading({
         message:'正在上传中...',
         duration:0,
@@ -138,7 +133,6 @@ export default {
         .then(res => {
           if (res.data.code === 0) {
 						this.$toast.success("上传成功");
-						// file.status = 'done'
             this.fileArr.push(res.data.url);
           } else {
             this.$toast(res.data.msg)
