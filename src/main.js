@@ -9,6 +9,7 @@ import './assets/js/fontsize.js'
 // import Meta from 'vue-meta'
 
 import {
+	Progress,
 	Icon,
 	Dialog,
 	RadioGroup, 
@@ -52,6 +53,7 @@ Vue.use(RadioGroup)
 	.use(Checkbox)
 	.use(CheckboxGroup)
 	.use(Search)
+	.use(Progress)
 
 //把 `******` 加到 `Vue` 的原型中
 Vue.prototype.axios = axios
