@@ -1,6 +1,6 @@
 <template>
   <div class="hudong-box">
-    <CheckDoctor></CheckDoctor>
+    <SelectDoctor></SelectDoctor>
     <div class="chact-box">
       <div>
         <div class="doctor-chart flex-m">
@@ -14,11 +14,11 @@
 </template>
 
 <script>
-import CheckDoctor from './../components/CheckDoctor'
+import SelectDoctor from './../components/SelectDoctor'
 
 export default {
   components: {
-    CheckDoctor
+    SelectDoctor
   }
 }
 </script>

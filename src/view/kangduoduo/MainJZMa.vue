@@ -1,7 +1,7 @@
 <template>
   <!-- 就诊码 -->
   <div class="jz-ma-box">
-    <CheckDoctor></CheckDoctor>
+    <SelectDoctor></SelectDoctor>
     <div class="code-box pr">
       <img src="" alt="" class="doctor-avatar">
       <div class="doctor-name">俞杞权医生</div>
@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import CheckDoctor from './../components/CheckDoctor'
+import SelectDoctor from './../components/SelectDoctor'
 export default {
   components: {
-    CheckDoctor
+    SelectDoctor
   }
 }
 </script>
