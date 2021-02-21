@@ -38,8 +38,8 @@ export default {
     }
   },
   mounted () {
-    this.activeId = 3
-    this.componentId = this.tabBarJson[3]
+    this.activeId = 2
+    this.componentId = this.tabBarJson[2]
   },
   methods: {
     handleCheckTab(id) {
@@ -55,12 +55,13 @@ export default {
   width 100%
   min-height 100vh
   background #F2F2F2
+  padding-bottom 3rem
 
 .footer-bar-box
   width 100%
   height 2.8rem
   background #fff
-  position absolute
+  position fixed
   left 0
   bottom 0
 
