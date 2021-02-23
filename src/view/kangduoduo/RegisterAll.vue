@@ -277,14 +277,14 @@ export default {
     width: 100%;
     height: 0.96rem;
     margin-top: 2.18rem;
-    margin-bottom: 2.8rem;
+    margin-bottom: 1.2rem;
     padding-left: 0.96rem;
     box-sizing: border-box;
   }
   .cell-box {
     width: 100%;
     // height: 150px;
-    padding: 1.4rem 1.6rem 1.2rem;
+    padding: .3rem 1.6rem;
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -298,7 +298,7 @@ export default {
     }
     input {
       width: 8.1rem;
-      height: 0.6rem;
+      height: 1rem;
       border: none;
       font-size: 0.52rem;
       padding: 0;
@@ -308,7 +308,7 @@ export default {
       content: "";
       position: absolute;
       left: 1.6rem;
-      bottom: -1.02rem;
+      bottom: -.4rem;
       width: 10.1rem;
       height: 0.02rem;
       background: #d0d0d0;
@@ -324,7 +324,7 @@ export default {
     background: #acacac;
     position: absolute;
     right: 1.8rem;
-    top: 1.56rem;
+    top: .46rem;
     transform: rotate(45deg);
   }
   .select-arrow::after {
@@ -334,7 +334,7 @@ export default {
     background: #fff;
     position: absolute;
     right: 1.84rem;
-    top: 1.56rem;
+    top: .46rem;
     transform: rotate(45deg);
   }
   .nan,
