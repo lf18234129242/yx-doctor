@@ -104,7 +104,7 @@ export default {
 							token: this.token,
 							userId: this.userId,
 							doctorId: this.doctorId,
-							// openModel: true
+							consultId: res.data.consultId,
 						}
 					})
 				}

@@ -36,6 +36,7 @@ const URL = {
 	consultInfo: BASEURL + '/api/doctor/consultInfo', // 医生回复问题保存
 	public_list: BASEURL + '/api/userconsult/public/list', // 公用问题列表接口
 	public_info: BASEURL + '/api/userconsult/public/info', // 公用问题单条记录接口
+	illness_shop: BASEURL + '//api/userconsult/illnessShop', // 疾病对应商品
 }
 
 module.exports = URL

@@ -1,9 +1,17 @@
 <template>
   <div class="internet-peiyao-box">
-    <img src="../../assets/img/online-peiyao.png" alt="" class="peiyao-img">
+		<img 
+			src="../../assets/img/online-peiyao.png" 
+			alt="" 
+			class="peiyao-img"
+			@click="handleLink()"
+		>
     <slot></slot>
     <!-- 其他病人都在看 -->
-    <div class="other-view">
+    <div 
+			class="other-view"
+			v-show="illnessShopList.length"
+		>
       <div class="view-title flex-m-c">
         <div class="line line-left"></div>
         ·
@@ -11,13 +19,15 @@
         ·
         <div class="line line-right"></div>
       </div>
-      <div class="view-item">
-        <div class="view-item-title suspe">手术后伤口恢复手术后伤口恢复手术后伤口恢复,需不需要吃海参?</div>
+      <div
+				class="view-item"
+				v-for="item in illnessShopList"
+				:key="item.id"
+			>
+        <div class="view-item-title suspe">{{item.title}}</div>
         <div class="view-item-content flex-m-sb">
-          <div class="item-desc suspe-3">
-            问题详情问题详情问题详情问题详情问题详情问题详情问题详情问题详情问题详情详情问题详情问题详情问题详情问题问题详情问题详情问题详情问题详情问题详情问题详情问题详情问题详情问题详情详情问题详情问题详情问题详情问题
-          </div>
-          <img src="" alt="" class="item-img">
+          <div class="item-desc suspe-3">{{item.desc}}</div>
+          <img :src="item.url" alt="" class="item-img">
         </div>
       </div>
     </div>
@@ -25,8 +35,37 @@
 </template>
 
 <script>
+import { getStrParam } from "@/utils/count"
+import { duoduo } from "@/utils/http"
+
 export default {
-  
+  data() {
+		return {
+			illnessShopList: [],
+			token: '',
+			consultId: '',
+		}
+	},
+	mounted () {
+    let href = window.location.href
+    this.token = getStrParam(href, "token");
+    this.consultId = getStrParam(href, "consultId");
+		this.getIllnessShop()
+	},
+	methods: {
+		getIllnessShop() {
+			let params = {
+				token: this.token,
+				consultId: this.consultId
+			}
+			duoduo.illnessShop(params).then(res => {
+				this.illnessShopList = res.list
+			})
+		},
+		handleLink() {
+			window.location.href = 'https://www.wjx.cn/vj/Yko2vyH.aspx'
+		}
+	},
 }
 </script>
 

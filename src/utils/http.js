@@ -31,6 +31,13 @@ const http = request => {
 }
 
 export const duoduo = {
+	illnessShop: async (params) => {
+		const res = await http(axios.post(api.illness_shop, params))
+		if (res) {
+			return Promise.resolve(res)
+		}
+		return Promise.reject(false)
+	},
 	getUserDoctorTeamList: async (params) => {
 		const res = await http(axios.post(api.userDoctorTeamList, params))
 		if (res) {
