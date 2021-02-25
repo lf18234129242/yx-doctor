@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="check-doctor" v-if="isMain">
-      <i class="iconfont"></i>
+      <i class="iconfont iconqiehuanyonghu"></i>
       切换医生
     </div>
-    <div class="check-doctor-bd" v-else>
-      <i class="iconfont"></i>
+    <div class="check-doctor-bd flex-m" v-else>
+      <i class="iconfont iconqiehuanyonghu"></i>
       切换医生
     </div>
   </div>
@@ -35,7 +35,9 @@ export default {
   border 1px solid rgba(255,255,255,.7)
   border-radius .48rem
   color rgba(255,255,255,.7)
-  line-height .94rem
   padding 0 .28rem
+
+  .iconqiehuanyonghu
+    margin-top -0.15rem
 
 </style>

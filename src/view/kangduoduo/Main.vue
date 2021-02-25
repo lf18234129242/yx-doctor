@@ -26,9 +26,9 @@ export default {
       activeId: 1,
       componentId: MainJZMa,
       tabBar: [
-        { id: 1, name: '就诊码', iconfont: '' },
-        { id: 2, name: '互动', iconfont: '' },
-        { id: 3, name: '升级', iconfont: '' }
+        { id: 1, name: '就诊码', iconfont: 'iconerweima' },
+        { id: 2, name: '互动', iconfont: 'iconxiaoxi' },
+        { id: 3, name: '升级', iconfont: 'iconaixin' }
       ],
       tabBarJson: {
         1: MainJZMa,
@@ -38,8 +38,8 @@ export default {
     }
   },
   mounted () {
-    this.activeId = 2
-    this.componentId = this.tabBarJson[2]
+    this.activeId = 1
+    this.componentId = this.tabBarJson[1]
   },
   methods: {
     handleCheckTab(id) {
@@ -64,6 +64,7 @@ export default {
   position fixed
   left 0
   bottom 0
+  padding .48rem 0 .28rem
 
   .active-item
     color #16A332
@@ -77,7 +78,7 @@ export default {
 
     .label
       font-size .72rem
-      margin-top .32rem
+      margin-top .2rem
 
 
 </style>

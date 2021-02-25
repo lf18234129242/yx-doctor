@@ -22,11 +22,33 @@
 
 <script>
 import SelectDoctor from './../components/SelectDoctor'
+import { duoduo } from "@/utils/http"
+import { getStrParam } from "@/utils/count"
 
 export default {
   components: {
     SelectDoctor
-  }
+  },
+  data() {
+    return {
+      chartList: [],
+      token: '',
+    }
+  },
+  mounted () {
+    let href = window.location.href
+    this.token = getStrParam(href, "token")
+    this.personInteraction()
+  },
+  methods: {
+    personInteraction() {
+      duoduo.personInteraction({
+        token: this.token
+      }).then(res => {
+        this.chartList = res.data.list
+      })
+    }
+  },
 }
 </script>
 

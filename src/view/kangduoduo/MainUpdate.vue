@@ -3,10 +3,10 @@
     <div class="main-header-box">
       <div class="header-info-box flex-sb">
         <div class="flex-m">
-          <img src="" alt="" class="avatar">
+          <img :src="mainUpdate.doctorAvatar" alt="" class="avatar">
           <div class="doctor-box">
-            <div class="doctor-name">俞杞权医生</div>
-            <div class="doctor-hospitol">上海龙华医院  胸外科</div>
+            <div class="doctor-name">{{mainUpdate.doctorName}}</div>
+            <div class="doctor-hospitol">{{mainUpdate.doctorDeptName}}</div>
           </div>
         </div>
         <SelectDoctor :isMain="false"></SelectDoctor>
@@ -16,12 +16,16 @@
 
     <div class="vip-box">
       <div class="text-1">当前等级</div>
-      <div class="text-2">老朋友</div>
-      <van-progress :percentage="50" stroke-width="12" color="#fff" />
-      <div class="flex-m">
-        <div class="renqing-score">人情分 1243/2678</div>
+      <div class="text-2">{{mainUpdate.rankName}}</div>
+      <van-progress 
+        :percentage="levelScore" 
+        stroke-width="12" 
+        color="#fff" 
+      />
+      <div class="flex-m" v-if="mainUpdate.nextRankIntegral !== 'max'">
+        <div class="renqing-score">人情分 {{mainUpdate.rankIntegral}}/{{mainUpdate.nextRankIntegral}}</div>
         <div class="jiasu flex-m">
-          <i class="iconfont"></i>
+          <i class="iconfont iconshandian"></i>
           加速
         </div>
       </div>
@@ -41,7 +45,12 @@
           :key="jtem.id"
           @click="handleLinkTo(jtem.url)"
         >
-          <img :src="jtem.iconfont" alt="" class="iconfont-img">
+          <div class="iconfont-img-box flex-m-c">
+            <i 
+              :class="['iconfont iconfont-img', jtem.iconfont]"
+              :style="{color: jtem.color}"
+            ></i>
+          </div>
           <div 
             class="label"
             :style="{color: jtem.color}"
@@ -54,6 +63,8 @@
 
 <script>
 import SelectDoctor from './../components/SelectDoctor'
+import { duoduo } from "@/utils/http"
+import { getStrParam } from "@/utils/count"
 
 export default {
   components: {
@@ -68,46 +79,75 @@ export default {
             {
               id: 1,
               name: '免费咨询',
-              iconfont: require('./../../assets/img/duoduo/menu-1.png'),
+              iconfont: 'iconyaoshizixun',
               url: '',
               color: '#C0A069'
             },
             {
               id: 2,
               name: '免费学习',
-              iconfont: require('./../../assets/img/duoduo/menu-2.png'),
+              iconfont: 'iconxinwenbijixuexineirongmeiti',
               url: '',
               color: '#C0A069'
             },
             {
               id: 3,
               name: '网上配药',
-              iconfont: require('./../../assets/img/duoduo/menu-3.png'),
+              iconfont: 'iconyiyaoxiang',
               url: '',
               color: '#C0A069'
             }
           ]
+        }
+      ],
+      nextLevelList: [
+        {
+          id: 4,
+          name: '营养处方',
+          iconfont: 'iconshishichufangguanli',
+          url: '',
+          color: '#999'
         },
         {
-          name: '下一级特权',
-          list: [
-            {
-              id: 4,
-              name: '营养处方',
-              iconfont: require('./../../assets/img/duoduo/menu-4.png'),
-              url: '',
-              color: '#999'
-            },
-            {
-              id: 5,
-              name: '免费学习',
-              iconfont: require('./../../assets/img/duoduo/menu-5.png'),
-              url: '',
-              color: '#999'
-            },
-          ]
+          id: 5,
+          name: '免费学习',
+          iconfont: 'iconyouhuiquan-xianxing',
+          url: '',
+          color: '#999'
+        },
+      ],
+      token: '',
+      mainUpdate: {}
+    }
+  },
+  computed: {
+    levelScore() {
+      if(this.mainUpdate.nextRankIntegral !== 'max') {
+        return 0
+      }
+      return (this.mainUpdate.rankIntegral / this.mainUpdate.nextRankIntegral) * 100
+    }
+  },
+  mounted () {
+    let href = window.location.href
+    this.token = getStrParam(href, "token")
+    this.getPersonUpgrade()
+  },
+  methods: {
+    getPersonUpgrade() {
+      duoduo.personUpgrade({
+        token: this.token
+      }).then(res => {
+        this.mainUpdate = res.data
+        if(+res.data.rankCode === 1) {
+          this.menuList.push({
+            name: '下一级特权',
+            list: this.nextLevelList
+          })
+        } else if (+res.data.rankCode === 2) {
+          this.menuList[0].list.push(this.nextLevelList)
         }
-      ]
+      })
     }
   },
 }
@@ -140,6 +180,7 @@ export default {
         width 2.4rem
         height 2.4rem
         margin-right .4rem
+        border-radius 50%
 
       .doctor-box
         .doctor-name
@@ -201,12 +242,9 @@ export default {
       height .92rem
       border-radius .46rem
       background linear-gradient(90deg, #384556 0%, #2A2D39 100%)
-      padding 0 .58rem
+      padding 0 .58rem 0 0
       font-size .56rem
       color #fff
-
-      .iconfont
-        margin-right .1rem
       
   .menu-list-box
     width 100%
@@ -229,9 +267,16 @@ export default {
         margin-right .8rem
         flex-direction column
 
-        .iconfont-img
+        .iconfont-img-box
           width 2.4rem
           height 2.4rem
+        
+        // .img-box-bg-1
+        // .img-box-bg-2
+
+
+        .iconfont-img
+          font-size 1.6rem
           margin-bottom .4rem
 
         .label

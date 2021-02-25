@@ -14,10 +14,34 @@
 
 <script>
 import SelectDoctor from './../components/SelectDoctor'
+import { duoduo } from "@/utils/http"
+import { getStrParam } from "@/utils/count"
+
 export default {
   components: {
     SelectDoctor
-  }
+  },
+  data() {
+    return {
+      token: '',
+      userData: {}
+    }
+  },
+  mounted () {
+    let href = window.location.href
+    this.token = getStrParam(href, "token")
+    this.getUserCode()
+  },
+  methods: {
+    getUserCode() {
+      duoduo.getUserCode({
+        token: this.token
+      }).then(res => {
+        console.log({res})
+        this.userData = res.data
+      })
+    }
+  },
 }
 </script>
 

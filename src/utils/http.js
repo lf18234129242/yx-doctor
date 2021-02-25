@@ -31,6 +31,27 @@ const http = request => {
 }
 
 export const duoduo = {
+	getUserCode: async (params) => {
+		const res = await http(axios.post('https://admin.okginko.com/ginkgo-admin//wx/api/userCode', params))
+		if (res) {
+			return Promise.resolve(res)
+		}
+		return Promise.reject(false)
+	},
+	personInteraction: async (params) => {
+		const res = await http(axios.post(api.person_interaction, params))
+		if (res) {
+			return Promise.resolve(res)
+		}
+		return Promise.reject(false)
+	},
+	personUpgrade: async (params) => {
+		const res = await http(axios.post(api.person_upgrade, params))
+		if (res) {
+			return Promise.resolve(res)
+		}
+		return Promise.reject(false)
+	},
 	illnessShop: async (params) => {
 		const res = await http(axios.post(api.illness_shop, params))
 		if (res) {
