@@ -2,18 +2,21 @@
   <div class="hudong-box">
     <SelectDoctor></SelectDoctor>
     <div class="chact-box">
-      <div>
-        <div class="doctor-chart flex">
+      <div
+        v-for="item in chartList"
+        :key="item.id"
+      >
+        <div class="doctor-chart flex" v-if="item.type === 2">
           <div class="doctor-avatar-box">
-            <img src="./../../assets/img/duoduo/menu-1.png" alt="" class="avatar-img">
-            <div class="name">张鹏医</div>
+            <img :src="item.avatarUrl" alt="" class="avatar-img">
+            <div class="name">{{item.doctorName}}</div>
           </div>
-          <div class="chart-popover pr">回复了你的问题回</div>
+          <div class="chart-popover pr">{{item.msg}}</div>
         </div>
-        <div class="chart-time">上午10:00</div>
-        <div class="user-chart flex">
-          <div class="chart-popover pr">你提交了一个问题</div>
-          <img src="./../../assets/img/duoduo/menu-1.png" alt="" class="avatar-img">
+        <div class="chart-time">{{item.createTime}}</div>
+        <div class="user-chart flex" v-if="item.type === 1">
+          <div class="chart-popover pr">{{item.msg}}</div>
+          <img :src="item.headimgUrl" alt="" class="avatar-img">
         </div>
       </div>
     </div>
@@ -32,19 +35,21 @@ export default {
   data() {
     return {
       chartList: [],
-      token: '',
+      filter: {
+        token: '',
+        limit: 10,
+        page: 1
+      }
     }
   },
   mounted () {
     let href = window.location.href
-    this.token = getStrParam(href, "token")
+    this.filter.token = getStrParam(href, "token")
     this.personInteraction()
   },
   methods: {
     personInteraction() {
-      duoduo.personInteraction({
-        token: this.token
-      }).then(res => {
+      duoduo.personInteraction(this.filter).then(res => {
         this.chartList = res.data.list
       })
     }
@@ -79,6 +84,7 @@ export default {
         background #fff
         border-radius .2rem
         padding .6rem
+        margin-right .5rem
 
         &::after
           width .4rem
@@ -115,6 +121,9 @@ export default {
           font-size .48rem
           color #666
           text-align center
+
+      .chart-popover-1
+        height 2rem
 
       .chart-popover
         width 9.52rem

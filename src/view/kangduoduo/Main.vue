@@ -38,8 +38,8 @@ export default {
     }
   },
   mounted () {
-    this.activeId = 1
-    this.componentId = this.tabBarJson[1]
+    this.activeId = 2
+    this.componentId = this.tabBarJson[2]
   },
   methods: {
     handleCheckTab(id) {

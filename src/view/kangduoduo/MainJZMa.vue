@@ -3,10 +3,10 @@
   <div class="jz-ma-box">
     <SelectDoctor></SelectDoctor>
     <div class="code-box pr">
-      <img src="" alt="" class="doctor-avatar">
-      <div class="doctor-name">俞杞权医生</div>
-      <img src="" alt="" class="code-img">
-      <div class="level-text">黄金</div>
+      <img :src="userData.doctorAvatar" alt="" class="doctor-avatar">
+      <div class="doctor-name">{{userData.doctorName}}</div>
+      <img :src="qrCode" alt="" class="code-img">
+      <div class="level-text">{{userData.rankName}}</div>
       <div class="desc">门诊就诊时请出示给医生<br>家人扫一扫, 可增加积分</div>
     </div>
   </div>
@@ -16,6 +16,7 @@
 import SelectDoctor from './../components/SelectDoctor'
 import { duoduo } from "@/utils/http"
 import { getStrParam } from "@/utils/count"
+import QRCode from 'qrcode'
 
 export default {
   components: {
@@ -23,6 +24,7 @@ export default {
   },
   data() {
     return {
+      qrCode: '',
       token: '',
       userData: {}
     }
@@ -37,8 +39,19 @@ export default {
       duoduo.getUserCode({
         token: this.token
       }).then(res => {
-        console.log({res})
         this.userData = res.data
+        this.qrcode()
+      })
+    },
+    qrcode() {
+      QRCode.toDataURL(this.userData.url, {
+        type: 'image/jpeg',
+        color: {
+          dark:"#6A3C00",
+          light:"#fff"
+        }
+      }).then(url => {
+        this.qrCode = url
       })
     }
   },
