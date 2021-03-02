@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="doctor-box">
     <div class="check-doctor" v-if="isMain">
       <i class="iconfont iconqiehuanyonghu"></i>
       切换医生
@@ -23,6 +23,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.doctor-box
+  z-index 999
+
 .check-doctor
   height 30px
   color #333

@@ -1,25 +1,33 @@
 <template>
-  <div class="hudong-box">
-    <SelectDoctor></SelectDoctor>
-    <div class="chact-box">
-      <div
-        v-for="item in chartList"
-        :key="item.id"
-      >
-        <div class="doctor-chart flex" v-if="item.type === 2">
-          <div class="doctor-avatar-box">
-            <img :src="item.avatarUrl" alt="" class="avatar-img">
-            <div class="name">{{item.doctorName}}</div>
+  <div class="hudong-box" ref="chactBox">
+    <SelectDoctor style="position: fixed;right: 0.64rem;top: 0.5rem;"></SelectDoctor>
+
+    <van-pull-refresh 
+      v-model="isLoading" 
+      @refresh="onRefresh"
+    >
+      <div class="chact-box">
+        <div
+          v-for="item in chartList"
+          :key="item.id"
+        >
+          <div class="doctor-chart flex" v-if="item.type === 2">
+            <div class="doctor-avatar-box">
+              <img :src="item.avatarUrl" alt="" class="avatar-img">
+              <div class="name">{{item.doctorName}}</div>
+            </div>
+            <div>
+              <div class="chart-popover pr">{{item.msg}}</div>
+            </div>
           </div>
-          <div class="chart-popover pr">{{item.msg}}</div>
-        </div>
-        <div class="chart-time">{{item.createTime}}</div>
-        <div class="user-chart flex" v-if="item.type === 1">
-          <div class="chart-popover pr">{{item.msg}}</div>
-          <img :src="item.headimgUrl" alt="" class="avatar-img">
+          <div class="chart-time">{{item.createTime}}</div>
+          <div class="user-chart flex" v-if="item.type === 1">
+            <div class="chart-popover pr">{{item.msg}}</div>
+            <img :src="item.headimgUrl" alt="" class="avatar-img">
+          </div>
         </div>
       </div>
-    </div>
+    </van-pull-refresh>
   </div>
 </template>
 
@@ -34,6 +42,8 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
+      hasMore: true,
       chartList: [],
       filter: {
         token: '',
@@ -48,9 +58,30 @@ export default {
     this.personInteraction()
   },
   methods: {
+    onRefresh() {
+      this.filter.page++
+      this.filter.page = this.filter.page * this.filter.limit
+      if(this.hasMore) {
+        this.personInteraction()
+      } else {
+        this.isLoading = false
+      }
+    },
     personInteraction() {
+      this.isLoading = true
       duoduo.personInteraction(this.filter).then(res => {
-        this.chartList = res.data.list
+        this.isLoading = false
+        if(res.data.list.length) {
+          this.hasMore = true
+          this.chartList = this.chartList.concat(res.data.list)
+        } else {
+          this.hasMore = false
+        }
+        if(this.filter.page === 1) {
+          this.$nextTick(() => {
+            this.$refs.chactBox.scrollTop = 100000000
+          })
+        }
       })
     }
   },
@@ -60,6 +91,8 @@ export default {
 <style lang="stylus" scoped>
 .hudong-box
   width 100%
+  height (100vh - 3.28rem)
+  overflow-y auto
   background #F2F2F2
   padding .7rem .64rem
 
