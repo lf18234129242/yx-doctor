@@ -2,16 +2,30 @@
   <div class="patient-box">
     <h1>请输入您的信息</h1>
     <div class="cell-box">
-      <p>姓名</p>
-      <input type="text" v-model="username" placeholder="请输入您的姓名" />
-    </div>
-    <div class="cell-box select-arrow" @click="selectSex">
-      <p>性别</p>
-      <input disabled type="text" v-model="usersex" placeholder="点击选择" />
+      <p class="user-name-label">姓名</p>
+      <input class="user-name" type="text" v-model="username" placeholder="请输入您的姓名" />
+      <div class="flex-m gender-box" @click="handleChangeGender()">
+        <div :class="['gender-left flex-m-c', gender === 2 ? 'active-gender' : '']">
+          <i class="iconfont iconxingbienv"></i>
+          女士
+        </div>
+        <div :class="['gender-right flex-m-c', gender === 1 ? 'active-gender' : '']">
+          <i class="iconfont iconxingbienan"></i>
+          男士
+        </div>
+      </div>
     </div>
     <div class="cell-box select-arrow" @click="selectAge">
       <p>年龄</p>
-      <input disabled type="text" v-model="userage" placeholder="点击选择" />
+      <input @click="selectAge" disabled type="text" v-model="userage" placeholder="点击选择年龄" />
+    </div>
+    <div class="cell-box select-arrow" @click="showIll = true">
+      <p>疾病</p>
+      <input disabled type="text" v-model="illText" placeholder="点击选择疾病" />
+    </div>
+    <div class="cell-box select-arrow" @click="showIllStep = true">
+      <p>病程</p>
+      <input disabled type="text" v-model="illStepText" placeholder="点击选择病程" />
     </div>
     <div class="cell-box">
       <p>手机</p>
@@ -22,15 +36,6 @@
       <input class="reg_input" type="number" v-model="reg_num" placeholder="请输入验证码" />
       <div class="get-reg-num" @click="getRegNum">{{timeout}}</div>
     </div>
-
-    <!-- 选择性别弹出框 -->
-    <van-popup v-model="show_sex" round position="bottom">
-      <ul @click="chooseSex">
-        <li class="nan" :data-index="1">男</li>
-        <li class="nv" :data-index="2">女</li>
-        <li class="cancel" :data-index="3">取消</li>
-      </ul>
-    </van-popup>
     <!-- 选择年龄弹出框 -->
     <van-popup v-model="show_age" round position="bottom">
       <van-picker
@@ -42,17 +47,52 @@
         @confirm="onConfirm_age"
       />
     </van-popup>
+
+    <!-- 选择疾病 -->
+    <van-popup v-model="showIll" round position="bottom">
+      <van-picker
+        show-toolbar
+        title="选择疾病"
+        :columns="illList"
+        value-key="name"
+        @cancel="showIll = false"
+        @confirm="onConfirmIll"
+      />
+    </van-popup>
+
+    <!-- 选择病程 -->
+    <van-popup v-model="showIllStep" round position="bottom">
+      <van-picker
+        show-toolbar
+        title="选择疾病"
+        :columns="illStepList"
+        value-key="NAME"
+        @cancel="showIllStep = false"
+        @confirm="onConfirmIllStep"
+      />
+    </van-popup>
+
     <van-button type="primary" color="#16A332" :disabled="disabledNext" @click="next">下一步</van-button>
   </div>
 </template>
 
 <script>
-import { yinxing } from "@/utils/http"
+import { yinxing, duoduo } from "@/utils/http"
 import { getStrParam, XSSReg } from "@/utils/count";
 export default {
   name: 'RegisterAll',
   data() {
     return {
+      illnesStepId: '',
+      illStepText: '',
+      illStepId: '',
+      illStep: '',
+      illText: '',
+      illnessId: '',
+      illStepList: [],
+      illList: [],
+      showIllStep: false,
+      showIll: false,
       disabledNext: false,
       phone_num: "",
       reg_num: "",
@@ -62,15 +102,14 @@ export default {
       userage: "",
       timeout: "获取验证码",
       isGetRegNum: true,
-      gender: null,
-      show_sex: false,
+      gender: 1,
+      // show_sex: false,
       show_age: false,
       sex_columns: ["男", "女"],
       age_columns: [],
       token: "",
       userId: "",
       doctorId: "",
-      // myIntegral: "",
     };
   },
   mounted() {
@@ -80,8 +119,42 @@ export default {
     this.doctorId = getStrParam(href, "doctorId");
     sessionStorage.setItem("token", this.token);
     this.disabledNext = false
+    this.getIllList()
   },
   methods: {
+    onConfirmIllStep(value) {
+      this.illnesStepId = value.id
+      this.illStepText = value.NAME
+      this.showIllStep = false
+    },
+    onConfirmIll(value) {
+      this.illnessId = value.id
+      this.illText = value.name
+      this.showIll = false
+      this.getIllStep()
+    },
+    handleChangeGender() {
+      this.gender = this.gender === 1 ? 2 : 1
+    },
+    getIllStep() {
+      duoduo.newList({
+        token: this.token,
+        illnessId: this.illnessId
+      }).then(res => {
+        if (res.data.code === 0) {
+          this.illStepList = res.data.data
+        }
+      })
+    },
+    getIllList() {
+      yinxing.getIllList({
+        token: this.token
+      }).then(res => {
+        if (res.data.code === 0) {
+          this.illList = res.data.data
+        }
+      })
+    },
     // 下一步
     next() {
       let username = this.username.trim().replace(XSSReg, '')
@@ -121,18 +194,6 @@ export default {
         token: this.token
       }).then(res => {
         if (res.data.code === 0) {
-          // this.getTotalIntegral()
-					// this.myIntegral = res.data.totalIntegral
-					// if (this.myIntegral < 20) {
-						// this.$router.push({
-						// 	path: '/Share',
-						// 	query: {
-            //     userId: this.userId,
-            //     doctorId: this.doctorId,
-            //     token: this.token
-						// 	}
-						// })
-					// } else {
             this.$router.push({
               path: "/SubmitTheIllness",
               query: {
@@ -145,49 +206,17 @@ export default {
         }
       })
     },
-		// getTotalIntegral() {
-		// 	duoduo.getTotalIntegral({token: this.token}).then(res => {
-		// 		if (res.data.code === 0) {
-		// 			this.myIntegral = res.data.totalIntegral
-		// 			if (this.myIntegral < 20) {
-		// 				this.$router.push({
-		// 					path: '/Share',
-		// 					query: {
-    //             userId: this.userId,
-    //             doctorId: this.doctorId,
-    //             token: this.token
-		// 					}
-		// 				})
-		// 			} else {
-    //         this.$router.push({
-    //           path: "/SubmitTheIllness",
-    //           query: {
-    //             token: this.token,
-    //             userId: this.userId,
-    //             doctorId: this.doctorId
-    //           }
-    //         })
-    //       }
-		// 		}
-		// 	})
-		// },
-    selectSex() {
-      this.show_sex = true;
-    },
     chooseSex(event) {
       switch (event.target.innerHTML) {
         case "男":
           this.usersex = "男";
           this.gender = 1;
-          this.show_sex = false;
           break;
         case "女":
           this.usersex = "女";
           this.gender = 2;
-          this.show_sex = false;
           break;
         case "取消":
-          this.show_sex = false;
           break;
       }
     },
@@ -269,6 +298,8 @@ export default {
 }
 .patient-box {
   width: 100%;
+  min-height 100vh
+  background #fff
   position: absolute;
   h1 {
     font-size: 0.96rem;
@@ -283,11 +314,34 @@ export default {
   }
   .cell-box {
     width: 100%;
-    // height: 150px;
-    padding: .3rem 1.6rem;
+    height: 2rem
+    display: flex;
+    align-items center
+    padding: 0 .8rem;
     box-sizing: border-box;
     display: flex;
     align-items: center;
+    .gender-box{
+      width 5.1rem
+      height 1.36rem
+      border-radius .68rem
+      background #EDEDED
+      margin-left auto
+      .active-gender{
+        background #16A332
+        color #fff!important
+      }
+      .gender-left,.gender-right{
+        height 100%
+        flex 1.1
+        font-size .6rem
+        color #999
+        border-radius .68rem
+      }
+    }
+    .user-name{
+      width 4rem
+    }
     p {
       width: 2rem;
       font-size: 0.56rem;
@@ -307,10 +361,19 @@ export default {
     p::after {
       content: "";
       position: absolute;
-      left: 1.6rem;
-      bottom: -.4rem;
+      left: 2.5rem;
+      bottom: -0.8rem;
       width: 10.1rem;
-      height: 0.02rem;
+      height: 0.05rem;
+      background: #d0d0d0;
+    }
+    .user-name-label::after {
+      content: "";
+      position: absolute;
+      left: 2.5rem;
+      bottom: -0.8rem;
+      width: 5rem;
+      height: 0.05rem;
       background: #d0d0d0;
     }
   }
@@ -323,8 +386,8 @@ export default {
     height: 0.4rem;
     background: #acacac;
     position: absolute;
-    right: 1.8rem;
-    top: .46rem;
+    right: 1rem;
+    top: .9rem;
     transform: rotate(45deg);
   }
   .select-arrow::after {
@@ -333,8 +396,8 @@ export default {
     height: 0.4rem;
     background: #fff;
     position: absolute;
-    right: 1.84rem;
-    top: .46rem;
+    right: 1.04rem;
+    top: .9rem;
     transform: rotate(45deg);
   }
   .nan,

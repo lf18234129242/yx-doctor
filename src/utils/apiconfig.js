@@ -39,6 +39,7 @@ const URL = {
 	illness_shop: BASEURL + '/api/userconsult/illnessShop', // 疾病对应商品
 	person_upgrade: BASEURL + '/api/userinfo/personUpgrade', // 用户个人中心-升级接口
 	person_interaction: BASEURL + '/api/userinfo/personInteraction', // 用户个人中心-互动接口
+	new_list: BASEURL + '/ginkgo-api/api/process/newList', // 新病程接口
 }
 
 module.exports = URL
