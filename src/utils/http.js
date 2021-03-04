@@ -38,6 +38,13 @@ export const duoduo = {
 		}
 		return Promise.reject(false)
 	},
+	newList: async (params) => {
+		const res = await http(axios.post(api.new_list, params))
+		if (res) {
+			return Promise.resolve(res)
+		}
+		return Promise.reject(false)
+	},
 	personInteraction: async (params) => {
 		const res = await http(axios.post(api.person_interaction, params))
 		if (res) {
