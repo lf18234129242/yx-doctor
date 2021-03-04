@@ -139,11 +139,13 @@ export default {
     sessionStorage.setItem("token", this.filter.token);
     this.disabledNext = false
     this.getIllList()
-    this.wxAddress()
+    // this.$nextTick(() => {
+    //   this.wxAddress()
+    // })
   },
   methods: {
     wxAddress() {
-      let that = this;
+      let that = this
       // let u = navigator.userAgent;
       // let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
       // let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
@@ -162,21 +164,30 @@ export default {
       // let url = this.GLOBAL.API_WECHATLOGIN_GET_WECHAT_SIGN;//签名接口
       duoduo.jsInit({
         token: this.filter.token,
-        url: window.location.href.split('#')[0]
+        // url: window.location.href.split('#')[0]
+        url: 'https://www.okginko.com/index.html'
       }).then((res) => {
-        if (res.data.code === 0) {
-          let resulted = res.data
+        // if (res.data.code === 0) {
           wx.config({ //配置微信接口
             debug: false,
-            appId: resulted.appId,
-            timestamp: resulted.timestamp,
-            nonceStr: resulted.noncestr,
-            signature: resulted.signature,
-            jsApiList: [ // 所有要调用的 API 都要加到这个列表中,要调用的微信接口
-              'getLocation'
-            ]
+            appId: res.data.appId,
+            timestamp: res.data.timestamp,
+            nonceStr: res.data.nonceStr,
+            signature: res.data.signature,
+            jsApiList: ['openLocation', 'getLocation']
           });
+          console.log('wx.getLocation', wx.getLocation)
           wx.ready(function () {
+            console.log('-----------ready--------')
+            // wx.openLocation({
+            //   type: 'gcj02',
+            //   success(res) {
+            //     console.log('openLocation', res)
+            //   },
+            //   complete(com) {
+            //     console.log({com})
+            //   }
+            // })
             wx.getLocation({
               type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
               success: function(res) {
@@ -184,39 +195,42 @@ export default {
                 // that.latitude = res.latitude;
                 // that.longitude = res.longitude;
                 //火星经纬度转百度地图经纬度
-                let x_PI = 3.14159265358979324 * 3000.0 / 180.0;
-                var lat =Number(res.latitude);
-                var lng =Number(res.longitude);
-                var z =Math.sqrt(lng * lng + lat * lat) +0.00002 * Math.sin(lat * x_PI);
-                var theta = Math.atan2(lat, lng) + 0.000003 * Math.cos(lng * x_PI);
-                that.longitude = z*Math.cos(theta) + 0.0065;
-                that.latitude = z*Math.sin(theta) + 0.006; 
+                // let x_PI = 3.14159265358979324 * 3000.0 / 180.0;
+                // var lat =Number(res.latitude);
+                // var lng =Number(res.longitude);
+                // var z =Math.sqrt(lng * lng + lat * lat) +0.00002 * Math.sin(lat * x_PI);
+                // var theta = Math.atan2(lat, lng) + 0.000003 * Math.cos(lng * x_PI);
+                // that.longitude = z*Math.cos(theta) + 0.0065;
+                // that.latitude = z*Math.sin(theta) + 0.006; 
                 that.detailAddress();
               },
               fail: function(err) {
-                console.log({err})
+                console.log('err+++++', {err})
                 that.Toast({
                   message: err,
                   position: 'center',
                   duration: 2000
                 })
+              },
+              complete(complete) {
+                console.log({complete})
               }
             });
           });
-          wx.error(function (res) {
-            that.Toast({
-              message: res,
-              position: 'center',
-              duration: 5000
-            })
-          });
-        } else {
-          that.Toast({
-            message: res.data.message,
-            position: 'center',
-            duration: 5000
-          })
-        }
+          // wx.error(function (res) {
+          //   that.Toast({
+          //     message: res,
+          //     position: 'center',
+          //     duration: 5000
+          //   })
+          // });
+        // } else {
+        //   that.Toast({
+        //     message: res.data.message,
+        //     position: 'center',
+        //     duration: 5000
+        //   })
+        // }
       })
     },
     detailAddress(){
@@ -229,9 +243,9 @@ export default {
         this.filter.city = addComp.city
         this.filter.area = addComp.district
         // let street = addComp.street
-        console.log(rs.addressComponents)
+        console.log('22222222', rs.addressComponents)
         // that.address=province+city+district+street
-        console.log(that.address)        
+        console.log('33333333333', that.address)        
       })
     },
     onConfirmIllStep(value) {
