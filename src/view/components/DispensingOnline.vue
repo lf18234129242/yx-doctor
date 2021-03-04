@@ -1,10 +1,11 @@
 <template>
   <div class="internet-peiyao-box">
 		<img 
+			v-if="doctorWjx"
 			src="../../assets/img/online-peiyao.png" 
 			alt="" 
 			class="peiyao-img"
-			@click="handleLink('https://www.wjx.cn/vj/Yko2vyH.aspx')"
+			@click="handleLink(doctorWjx)"
 		>
     <slot></slot>
     <!-- 其他病人都在看 -->
@@ -45,6 +46,7 @@ export default {
 			illnessShopList: [],
 			token: '',
 			consultId: '',
+			doctorWjx: '',
 		}
 	},
 	mounted () {
@@ -61,6 +63,7 @@ export default {
 			}
 			duoduo.illnessShop(params).then(res => {
 				this.illnessShopList = res.data.list
+				this.doctorWjx = res.data.doctorWjx
 			})
 		},
 		handleLink(url) {
