@@ -83,16 +83,10 @@
 </template>
 
 <script>
+
 import { yinxing, duoduo } from "@/utils/http"
 import { getStrParam, XSSReg } from "@/utils/count";
-// import BMap from 'BMap'
-import BaiduMap from 'vue-baidu-map'
-import Vue from 'vue'
 import wx from 'weixin-js-sdk'
-
-Vue.use(BaiduMap, {
-	ak: 'fA0g4pvRrmFy45tziwe4QF1tOcaN54HC'
-})
 
 export default {
   name: 'RegisterAll',
@@ -139,113 +133,71 @@ export default {
     sessionStorage.setItem("token", this.filter.token);
     this.disabledNext = false
     this.getIllList()
-    // this.$nextTick(() => {
-    //   this.wxAddress()
-    // })
+    this.wxAddress()
+    setTimeout(() => {
+      window['bMapInit'] = () => {
+        this.getLocation()
+      }
+    }, 3000)
+    this.loadBMapScript()
   },
   methods: {
+    loadBMapScript () {
+      let script = document.createElement('script')
+      script.src = 'https://api.map.baidu.com/api?v=3.0&ak=fA0g4pvRrmFy45tziwe4QF1tOcaN54HC&callback=bMapInit'
+      document.body.appendChild(script)
+    },
     wxAddress() {
-      let that = this
-      // let u = navigator.userAgent;
-      // let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
-      // let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-      // let request_url = ''
-      // if (isAndroid) {
-      //   this.isIOS = false;
-      //   request_url = encodeURIComponent(location.href);
-      // }
-      // if (isIOS) {
-      //   this.isIOS = true;
-      //   request_url = encodeURIComponent(window.entryUrl);//这里是解决ios路由不刷新，获取签名失败的问题，具体使用见最后
-      // }
-      // let params = {
-      //   url: request_url
-      // }
-      // let url = this.GLOBAL.API_WECHATLOGIN_GET_WECHAT_SIGN;//签名接口
-      duoduo.jsInit({
+      let params = {
         token: this.filter.token,
-        // url: window.location.href.split('#')[0]
-        url: 'https://www.okginko.com/index.html'
-      }).then((res) => {
-        // if (res.data.code === 0) {
-          wx.config({ //配置微信接口
-            debug: false,
-            appId: res.data.appId,
-            timestamp: res.data.timestamp,
-            nonceStr: res.data.nonceStr,
-            signature: res.data.signature,
-            jsApiList: ['openLocation', 'getLocation']
-          });
-          console.log('wx.getLocation', wx.getLocation)
-          wx.ready(function () {
-            console.log('-----------ready--------')
-            // wx.openLocation({
-            //   type: 'gcj02',
-            //   success(res) {
-            //     console.log('openLocation', res)
-            //   },
-            //   complete(com) {
-            //     console.log({com})
-            //   }
-            // })
-            wx.getLocation({
-              type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-              success: function(res) {
-                console.log({res}, '----------')
-                // that.latitude = res.latitude;
-                // that.longitude = res.longitude;
-                //火星经纬度转百度地图经纬度
-                // let x_PI = 3.14159265358979324 * 3000.0 / 180.0;
-                // var lat =Number(res.latitude);
-                // var lng =Number(res.longitude);
-                // var z =Math.sqrt(lng * lng + lat * lat) +0.00002 * Math.sin(lat * x_PI);
-                // var theta = Math.atan2(lat, lng) + 0.000003 * Math.cos(lng * x_PI);
-                // that.longitude = z*Math.cos(theta) + 0.0065;
-                // that.latitude = z*Math.sin(theta) + 0.006; 
-                that.detailAddress();
-              },
-              fail: function(err) {
-                console.log('err+++++', {err})
-                that.Toast({
-                  message: err,
-                  position: 'center',
-                  duration: 2000
-                })
-              },
-              complete(complete) {
-                console.log({complete})
-              }
-            });
-          });
-          // wx.error(function (res) {
-          //   that.Toast({
-          //     message: res,
-          //     position: 'center',
-          //     duration: 5000
-          //   })
-          // });
-        // } else {
-        //   that.Toast({
-        //     message: res.data.message,
-        //     position: 'center',
-        //     duration: 5000
-        //   })
-        // }
+        url: window.location.href.split('#')[0]
+      }
+      duoduo.jsInit(params).then((res) => {
+        wx.config({ //配置微信接口
+          debug: false,
+          appId: res.data.appId,
+          timestamp: res.data.timestamp,
+          nonceStr: res.data.nonceStr,
+          signature: res.data.signature,
+          jsApiList: ['getLocation']
+        });
+      })
+    },
+    getLocation() {
+      let that = this
+      wx.getLocation({
+        type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+        success: function(res) {
+          console.log({res}, '----------')
+          that.longitude = res.longitude
+          that.latitude = res.latitude
+          that.detailAddress()
+        },
+        fail: function(err) {
+          console.log('err+++++', {err})
+          that.Toast({
+            message: err,
+            position: 'center',
+            duration: 2000
+          })
+        },
+        complete(complete) {
+          console.log({complete})
+        }
       })
     },
     detailAddress(){
       let that = this;
-      let point = new BaiduMap.Point(that.longitude, that.latitude)
-      let gc = new BaiduMap.Geocoder()
-      gc.getLocation(point, function(rs){
-        let addComp = rs.addressComponents
-        this.filter.province = addComp.province
-        this.filter.city = addComp.city
-        this.filter.area = addComp.district
-        // let street = addComp.street
-        console.log('22222222', rs.addressComponents)
-        // that.address=province+city+district+street
-        console.log('33333333333', that.address)        
+      // let point = new BMap.Point('112.56272', '37.87343')
+      /* global BMap */
+      let point = new BMap.Point(this.longitude, this.latitude)
+      let gc = new BMap.Geocoder()
+      gc.getLocation(point, function(res){
+        console.log('getLocation', res)
+        let addComp = res.addressComponents
+        that.filter.province = addComp.province
+        that.filter.city = addComp.city
+        that.filter.area = addComp.district
       })
     },
     onConfirmIllStep(value) {

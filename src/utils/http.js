@@ -31,6 +31,13 @@ const http = request => {
 }
 
 export const duoduo = {
+	// convert: async (params) => {
+	// 	const res = await http(axios.get(`http://api.map.baidu.com/ag/coord/convert?from=2&to=4&x=${params.longitude}&y=${params.latitude}`))
+	// 	if (res) {
+	// 		return Promise.resolve(res)
+	// 	}
+	// 	return Promise.reject(false)
+	// },
 	getUserCode: async (params) => {
 		const res = await http(axios.post('https://admin.okginko.com/ginkgo-admin//wx/api/userCode', params))
 		if (res) {
