@@ -85,6 +85,15 @@
 <script>
 import { yinxing, duoduo } from "@/utils/http"
 import { getStrParam, XSSReg } from "@/utils/count";
+// import BMap from 'BMap'
+import BaiduMap from 'vue-baidu-map'
+import Vue from 'vue'
+import wx from 'weixin-js-sdk'
+
+Vue.use(BaiduMap, {
+	ak: 'fA0g4pvRrmFy45tziwe4QF1tOcaN54HC'
+})
+
 export default {
   name: 'RegisterAll',
   data() {
@@ -113,7 +122,7 @@ export default {
       disabledNext: false,
       reg_num: "",
       phoneCode: "",
-      usersex: "",
+      usersex: "男",
       timeout: "获取验证码",
       isGetRegNum: true,
       show_age: false,
@@ -130,8 +139,101 @@ export default {
     sessionStorage.setItem("token", this.filter.token);
     this.disabledNext = false
     this.getIllList()
+    this.wxAddress()
   },
   methods: {
+    wxAddress() {
+      let that = this;
+      // let u = navigator.userAgent;
+      // let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+      // let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+      // let request_url = ''
+      // if (isAndroid) {
+      //   this.isIOS = false;
+      //   request_url = encodeURIComponent(location.href);
+      // }
+      // if (isIOS) {
+      //   this.isIOS = true;
+      //   request_url = encodeURIComponent(window.entryUrl);//这里是解决ios路由不刷新，获取签名失败的问题，具体使用见最后
+      // }
+      // let params = {
+      //   url: request_url
+      // }
+      // let url = this.GLOBAL.API_WECHATLOGIN_GET_WECHAT_SIGN;//签名接口
+      duoduo.jsInit({
+        token: this.filter.token,
+        url: window.location.href.split('#')[0]
+      }).then((res) => {
+        if (res.data.code === 0) {
+          let resulted = res.data
+          wx.config({ //配置微信接口
+            debug: false,
+            appId: resulted.appId,
+            timestamp: resulted.timestamp,
+            nonceStr: resulted.noncestr,
+            signature: resulted.signature,
+            jsApiList: [ // 所有要调用的 API 都要加到这个列表中,要调用的微信接口
+              'getLocation'
+            ]
+          });
+          wx.ready(function () {
+            wx.getLocation({
+              type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+              success: function(res) {
+                console.log({res}, '----------')
+                // that.latitude = res.latitude;
+                // that.longitude = res.longitude;
+                //火星经纬度转百度地图经纬度
+                let x_PI = 3.14159265358979324 * 3000.0 / 180.0;
+                var lat =Number(res.latitude);
+                var lng =Number(res.longitude);
+                var z =Math.sqrt(lng * lng + lat * lat) +0.00002 * Math.sin(lat * x_PI);
+                var theta = Math.atan2(lat, lng) + 0.000003 * Math.cos(lng * x_PI);
+                that.longitude = z*Math.cos(theta) + 0.0065;
+                that.latitude = z*Math.sin(theta) + 0.006; 
+                that.detailAddress();
+              },
+              fail: function(err) {
+                console.log({err})
+                that.Toast({
+                  message: err,
+                  position: 'center',
+                  duration: 2000
+                })
+              }
+            });
+          });
+          wx.error(function (res) {
+            that.Toast({
+              message: res,
+              position: 'center',
+              duration: 5000
+            })
+          });
+        } else {
+          that.Toast({
+            message: res.data.message,
+            position: 'center',
+            duration: 5000
+          })
+        }
+      })
+    },
+    detailAddress(){
+      let that = this;
+      let point = new BaiduMap.Point(that.longitude, that.latitude)
+      let gc = new BaiduMap.Geocoder()
+      gc.getLocation(point, function(rs){
+        let addComp = rs.addressComponents
+        this.filter.province = addComp.province
+        this.filter.city = addComp.city
+        this.filter.area = addComp.district
+        // let street = addComp.street
+        console.log(rs.addressComponents)
+        // that.address=province+city+district+street
+        console.log(that.address)        
+      })
+    },
     onConfirmIllStep(value) {
       this.filter.processId = value.id
       this.illStepText = value.NAME

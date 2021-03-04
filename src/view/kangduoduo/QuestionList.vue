@@ -38,7 +38,7 @@
 							</div>
 							<div v-else></div>
 							<div class="btn_box">
-								<span v-if="item.show_power === 2">消耗10积分</span>
+								<!-- <span v-if="item.show_power === 2">消耗10积分</span> -->
 								<van-button class="look_detail">查看</van-button>
 							</div>
 						</div>

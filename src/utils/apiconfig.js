@@ -29,7 +29,7 @@ const URL = {
 	doctor_list: BASEURL + '/api/doctor/areaRecommended', // 同地区医生推荐列表
 	bind_doctor: BASEURL + '/api/userdoctor/save', // 绑定（保存）医生
 	usershare_save: BASEURL + '/api/usershare/save', // 分享绑定用户
-	jsInit: BASEURL + '/api/wx/jsInit', // 绑定（保存）医生
+	jsInit: BASEURL + '/api/wx/jsInit', // 获取签名
 	doctor_login: BASEURL + '/api/doctor/login', // 医生登录接口
 	consultList: BASEURL + '/api/doctor/consultList', // 医生问题列表
 	consultSave: BASEURL + '/api/doctor/consultSave', // 医生回复问题保存
