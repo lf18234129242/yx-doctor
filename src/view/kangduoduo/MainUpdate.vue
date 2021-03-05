@@ -6,12 +6,12 @@
           <img :src="mainUpdate.doctorAvatar" alt="" class="avatar">
           <div class="doctor-box">
             <div class="doctor-name">{{mainUpdate.doctorName}}</div>
-            <div class="doctor-hospitol">{{mainUpdate.doctorDeptName}}</div>
+            <div class="doctor-hospitol">{{mainUpdate.hospitalAbbr || mainUpdate.practiceHospital}} {{mainUpdate.doctorDeptName}}</div>
           </div>
         </div>
-        <SelectDoctor :isMain="false"></SelectDoctor>
+        <!-- <SelectDoctor :isMain="false"></SelectDoctor> -->
       </div>
-      <div class="tooltip-box">嗨,咱们老朋友了,有什么问题都可以入群找我哦~</div>
+      <div class="tooltip-box">{{mainUpdate.title}}</div>
     </div>
 
     <div class="vip-box">
@@ -24,10 +24,10 @@
       />
       <div class="flex-m" v-if="mainUpdate.nextRankIntegral !== 'max'">
         <div class="renqing-score">人情分 {{mainUpdate.rankIntegral}}/{{mainUpdate.nextRankIntegral}}</div>
-        <div class="jiasu flex-m">
+        <!-- <div class="jiasu flex-m">
           <i class="iconfont iconshandian"></i>
           加速
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -62,14 +62,14 @@
 </template>
 
 <script>
-import SelectDoctor from './../components/SelectDoctor'
+// import SelectDoctor from './../components/SelectDoctor'
 import { duoduo } from "@/utils/http"
 import { getStrParam } from "@/utils/count"
 
 export default {
-  components: {
-    SelectDoctor
-  },
+  // components: {
+  //   SelectDoctor
+  // },
   data() {
     return {
       menuList: [
@@ -184,14 +184,14 @@ export default {
 
       .doctor-box
         .doctor-name
-          font-size .6rem
+          font-size .9rem
           color #fff
-          margin-bottom .5rem
+          margin-bottom .2rem
+          font-weight bold
 
         .doctor-hospitol
-          font-size .72rem
+          font-size .6rem
           color #fff
-          font-weight 600
           text-align left
 
     .tooltip-box

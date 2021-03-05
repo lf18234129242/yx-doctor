@@ -66,6 +66,7 @@ export default {
   left 0
   bottom 0
   padding .48rem 0 .28rem
+  border-top 1px solid #F2F2F2
 
   .active-item
     color #16A332
@@ -73,6 +74,10 @@ export default {
   .bar-item
     flex 1
     flex-direction column
+
+    &:nth-child(2)
+      border-left 2px solid #F2F2F2
+      border-right 2px solid #F2F2F2
 
     .iconfont
       font-size 1.04rem

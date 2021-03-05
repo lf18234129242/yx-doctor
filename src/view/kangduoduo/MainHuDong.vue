@@ -1,6 +1,6 @@
 <template>
   <div class="hudong-box" ref="chactBox">
-    <SelectDoctor style="position: fixed;right: 0.64rem;top: 0.5rem;"></SelectDoctor>
+    <!-- <SelectDoctor style="position: fixed;right: 0.64rem;top: 0.5rem;"></SelectDoctor> -->
 
     <van-pull-refresh 
       v-model="isLoading" 
@@ -17,12 +17,12 @@
               <div class="name">{{item.doctorName}}</div>
             </div>
             <div>
-              <div class="chart-popover pr">{{item.msg}}</div>
+              <div class="chart-popover pr">{{item.dictName}}</div>
             </div>
           </div>
           <div class="chart-time">{{item.createTime}}</div>
           <div class="user-chart flex" v-if="item.type === 1">
-            <div class="chart-popover pr">{{item.msg}}</div>
+            <div class="chart-popover pr">{{item.dictName}}</div>
             <img :src="item.headimgUrl" alt="" class="avatar-img">
           </div>
         </div>
@@ -32,14 +32,14 @@
 </template>
 
 <script>
-import SelectDoctor from './../components/SelectDoctor'
+// import SelectDoctor from './../components/SelectDoctor'
 import { duoduo } from "@/utils/http"
 import { getStrParam } from "@/utils/count"
 
 export default {
-  components: {
-    SelectDoctor
-  },
+  // components: {
+  //   SelectDoctor
+  // },
   data() {
     return {
       isLoading: false,

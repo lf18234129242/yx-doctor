@@ -1,7 +1,7 @@
 <template>
   <!-- 就诊码 -->
   <div class="jz-ma-box">
-    <SelectDoctor></SelectDoctor>
+    <!-- <SelectDoctor></SelectDoctor> -->
     <div class="code-box pr">
       <img :src="userData.doctorAvatar" alt="" class="doctor-avatar">
       <div class="doctor-name">{{userData.doctorName}}</div>
@@ -13,15 +13,15 @@
 </template>
 
 <script>
-import SelectDoctor from './../components/SelectDoctor'
+// import SelectDoctor from './../components/SelectDoctor'
 import { duoduo } from "@/utils/http"
 import { getStrParam } from "@/utils/count"
 import QRCode from 'qrcode'
 
 export default {
-  components: {
-    SelectDoctor
-  },
+  // components: {
+  //   SelectDoctor
+  // },
   data() {
     return {
       qrCode: '',

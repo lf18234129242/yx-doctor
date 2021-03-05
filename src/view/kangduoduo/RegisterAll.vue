@@ -181,11 +181,7 @@ export default {
         },
         fail: function(err) {
           console.log('err+++++', {err})
-          that.Toast({
-            message: err,
-            position: 'center',
-            duration: 2000
-          })
+          this.getLocation()
         },
         complete(complete) {
           console.log({complete})
