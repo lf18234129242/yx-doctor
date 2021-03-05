@@ -136,20 +136,20 @@ export default {
 
     this.wxConfig()
 
-    window['bMapInit'] = () => {
-      this.loadBMapScript()
-    }
+    // window['bMapInit'] = () => {
+    //   this.loadBMapScript()
+    // }
 
     setTimeout(() => {
       this.getLocation()
     }, 5000)
   },
   methods: {
-    loadBMapScript () {
-      let script = document.createElement('script')
-      script.src = '//api.map.baidu.com/api?v=2.0&ak=fA0g4pvRrmFy45tziwe4QF1tOcaN54HC&callback=bMapInit'
-      document.body.appendChild(script)
-    },
+    // loadBMapScript () {
+    //   let script = document.createElement('script')
+    //   script.src = '//api.map.baidu.com/api?v=2.0&ak=fA0g4pvRrmFy45tziwe4QF1tOcaN54HC&callback=bMapInit'
+    //   document.body.appendChild(script)
+    // },
     wxConfig() {
       let params = {
         token: this.filter.token,

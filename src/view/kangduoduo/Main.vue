@@ -38,8 +38,9 @@ export default {
     }
   },
   mounted () {
-    this.activeId = 2
-    this.componentId = this.tabBarJson[2]
+    let tabId = +this.$route.query.tab
+    this.activeId = tabId
+    this.componentId = this.tabBarJson[tabId]
   },
   methods: {
     handleCheckTab(id) {
