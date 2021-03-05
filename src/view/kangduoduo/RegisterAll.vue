@@ -133,24 +133,28 @@ export default {
     sessionStorage.setItem("token", this.filter.token);
     this.disabledNext = false
     this.getIllList()
-    this.wxAddress()
+
+    this.wxConfig()
+
+    window['bMapInit'] = () => {
+      this.loadBMapScript()
+    }
+
     setTimeout(() => {
-      window['bMapInit'] = () => {
-        this.getLocation()
-      }
-    }, 3000)
-    this.loadBMapScript()
+      this.getLocation()
+    }, 5000)
   },
   methods: {
     loadBMapScript () {
       let script = document.createElement('script')
-      script.src = 'https://api.map.baidu.com/api?v=3.0&ak=fA0g4pvRrmFy45tziwe4QF1tOcaN54HC&callback=bMapInit'
+      script.src = '//api.map.baidu.com/api?v=2.0&ak=fA0g4pvRrmFy45tziwe4QF1tOcaN54HC&callback=bMapInit'
       document.body.appendChild(script)
     },
-    wxAddress() {
+    wxConfig() {
       let params = {
         token: this.filter.token,
         url: window.location.href.split('#')[0]
+        // url: 'https://www.okginko.com/index.html'
       }
       duoduo.jsInit(params).then((res) => {
         wx.config({ //配置微信接口
@@ -160,7 +164,11 @@ export default {
           nonceStr: res.data.nonceStr,
           signature: res.data.signature,
           jsApiList: ['getLocation']
-        });
+        })
+
+        wx.ready(function() {
+          console.log('ready-------')
+        })
       })
     },
     getLocation() {
@@ -169,9 +177,7 @@ export default {
         type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
         success: function(res) {
           console.log({res}, '----------')
-          that.longitude = res.longitude
-          that.latitude = res.latitude
-          that.detailAddress()
+          that.detailAddress(res.longitude, res.latitude)
         },
         fail: function(err) {
           console.log('err+++++', {err})
@@ -186,18 +192,30 @@ export default {
         }
       })
     },
-    detailAddress(){
+    detailAddress(longitude, latitude){
       let that = this;
+      console.log({longitude, latitude})
       // let point = new BMap.Point('112.56272', '37.87343')
       /* global BMap */
-      let point = new BMap.Point(this.longitude, this.latitude)
-      let gc = new BMap.Geocoder()
-      gc.getLocation(point, function(res){
-        console.log('getLocation', res)
-        let addComp = res.addressComponents
-        that.filter.province = addComp.province
-        that.filter.city = addComp.city
-        that.filter.area = addComp.district
+      let ggPoint = new BMap.Point(longitude, latitude)
+      let convertor = new BMap.Convertor()
+      let pointArr = []
+      pointArr.push(ggPoint)
+      convertor.translate(pointArr, 1, 5, function(data) {
+        console.log({data})
+        if (data.status == 0) {
+          let points = data.points
+          //获得准确的地理信息(使用转换后的百度坐标，顺序同上)
+          let point = new BMap.Point(points[0].lng, points[0].lat)
+          let geoc = new BMap.Geocoder()
+          geoc.getLocation(point, function(rs) {
+            console.log({rs})
+            let addComp = rs.addressComponents;
+            that.filter.province = addComp.province
+            that.filter.city = addComp.city
+            that.filter.area = addComp.district
+          })
+        }
       })
     },
     onConfirmIllStep(value) {
