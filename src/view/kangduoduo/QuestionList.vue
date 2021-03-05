@@ -1,9 +1,5 @@
 <template>
   <div class="QuestionList pr">
-		<!-- <div class="my_integral">
-			<li>我的积分：{{myIntegral}}</li>
-			<li @click="showShareArrow = true">立即转发赚积分</li>
-		</div> -->
 		<div class="no_data" v-if="questionList.length === 0">
 			<img src="@/assets/img/duoduo/no_record_data.png" alt="">
 			<p>您尚未提交问题</p>
@@ -38,32 +34,21 @@
 							</div>
 							<div v-else></div>
 							<div class="btn_box">
-								<!-- <span v-if="item.show_power === 2">消耗10积分</span> -->
 								<van-button class="look_detail">查看</van-button>
 							</div>
 						</div>
 						<div class="create_time">
 							<span>{{item.update_time}}</span>
-							<!-- <span>查看医生回复消耗10积分</span> -->
 						</div>
 					</div>
 				</van-list>
 			</van-pull-refresh>
 		</template>
 		<div class="kong"></div>
-		<!-- <van-button class="put_question" @click="putQuestion">再次提问</van-button> -->
     <nav>
       <div class="current_page" @click="handleLink">其他人的提问</div>
       <div @click="putQuestion">再次提问</div>
     </nav>
-		<!-- <div v-if="showShareArrow" class="share_arrow" @click="showShareArrow = false">
-			<img src="@/assets/img/duoduo/share_arrow.png" alt="">
-			<ul>
-				<li>1. 转发给您的好友</li>
-				<li>2. 请好友帮忙点一下链接</li>
-				<li>3. 即可赚取3积分</li>
-			</ul>
-		</div> -->
 	</div>
 </template>
 
@@ -81,8 +66,6 @@ export default {
 			page: 0,
 			limit: 10,
 			next_page: true,
-			// showShareArrow: false,
-			// myIntegral: 0,
 			doctorId: '',
 			userId: '',
 			doctorName: '',
@@ -99,13 +82,8 @@ export default {
     this.token = getStrParam(href, "token")
     this.userId = getStrParam(href, "userId")
     this.doctorId = getStrParam(href, "doctorId")
-		// let openModel = getStrParam(href, "openModel")
-		// if(openModel) {
-		// 	this.showShareArrow = true
-		// }
 		sessionStorage.setItem("token", this.token)
 		this.getQuestionList()
-		// this.getTotalIntegral()
 	},
 	methods: {
 		handleLink() {
@@ -118,13 +96,6 @@ export default {
 				}
 			})
 		},
-		// getTotalIntegral() {
-		// 	duoduo.getTotalIntegral({token: this.token}).then(res => {
-		// 		if (res.data.code === 0) {
-		// 			this.myIntegral = res.data.totalIntegral
-		// 		}
-		// 	})
-		// },
 		handleQuestionDetail(item) {
 			if (item.show_power === 1) {
 				this.$router.push({
@@ -136,18 +107,6 @@ export default {
 				})
 			} else if (item.show_power === 2) {
 				this.costIntegral(item)
-				// duoduo.getTotalIntegral({token: this.token}).then(res => {
-				// 	if (res.data.code === 0) {
-						// this.myIntegral = res.data.totalIntegral
-						// this.costIntegral(item)
-						// if (res.data.totalIntegral >= 10) {
-						// 	this.showShareArrow = false
-						// } else {
-						// 	Toast('您的积分不足,查看医生回复需要消耗10积分')
-						// 	this.showShareArrow = true
-						// }
-				// 	}
-				// })
 			}
 		},
 		// 进入详情页消耗积分
@@ -272,24 +231,6 @@ nav{
 	width: 100%;
 	min-height: 100vh;
 	background: #F2F2F2;
-	// .my_integral{
-	// 	width: 100%;
-	// 	height: 1.5rem;
-	// 	background: #b8e98a;
-	// 	display: flex;
-	// 	align-items: center;
-	// 	justify-content: space-between;
-	// 	li{
-	// 		color: #111;
-	// 		font-size: .7rem;
-	// 		line-height: 1.5rem;
-	// 		padding: 0 .4rem;
-	// 		box-sizing: border-box;
-	// 		&:nth-child(2){
-	// 			text-decoration: underline;
-	// 		}
-	// 	}
-	// }
 	.no_data{
 		width: 100%;
 		height: 10rem;
