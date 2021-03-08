@@ -153,8 +153,8 @@ export default {
     wxConfig() {
       let params = {
         token: this.filter.token,
-        url: window.location.href.split('#')[0]
-        // url: 'https://www.okginko.com/index.html'
+        // url: window.location.href.split('#')[0]
+        url: 'https://www.okginko.com/index.html'
       }
       duoduo.jsInit(params).then((res) => {
         wx.config({ //配置微信接口
@@ -205,7 +205,7 @@ export default {
           let point = new BMap.Point(points[0].lng, points[0].lat)
           let geoc = new BMap.Geocoder()
           geoc.getLocation(point, function(rs) {
-            console.log({rs})
+            console.log('地址：', {rs})
             let addComp = rs.addressComponents;
             that.filter.province = addComp.province
             that.filter.city = addComp.city
