@@ -19,7 +19,10 @@
 			</div>
 		</div>
 
-		<DispensingOnline>
+		<DispensingOnline
+			:linkUrl="linkUrl"
+			:linkType="linkType"
+		>
 			<van-button round class="put_question_again" @click="putQuestionAgain">追加提问</van-button>
 			<footer>
 				<h3>温馨提示</h3>
@@ -52,6 +55,8 @@ export default {
 			limit: 10,
 			page: 0,
 			next_page: true,
+			linkType: '',
+			linkUrl: ''
     }
 	},
 	mounted() {
@@ -109,6 +114,9 @@ export default {
 				token: this.token
 			}
 			duoduo.getQuestionInfo(params).then(res => {
+				this.linkType = res.data.linkType
+				this.linkUrl = res.data.linkUrl
+
 				if (res.data.list && res.data.list.length > 0) {
 					this.questionInfoList = this.questionInfoList.concat(res.data.list)
 					this.getDoctorInfo(res.data.list[0].doctor_id)

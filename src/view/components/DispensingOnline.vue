@@ -1,11 +1,18 @@
 <template>
   <div class="internet-peiyao-box">
 		<img 
-			v-if="doctorWjx"
+			v-if="linkType === 1"
 			src="../../assets/img/online-peiyao.png" 
 			alt="" 
 			class="peiyao-img"
-			@click="handleLink(doctorWjx)"
+			@click="handleLink(linkUrl || linkUrlData)"
+		>
+		<img 
+			v-if="linkType === 2"
+			src="../../assets/img/health-shop.png" 
+			alt="" 
+			class="peiyao-img"
+			@click="handleLink(linkUrl)"
 		>
     <slot></slot>
     <!-- 其他病人都在看 -->
@@ -46,8 +53,21 @@ export default {
 			illnessShopList: [],
 			token: '',
 			consultId: '',
-			doctorWjx: '',
 		}
+	},
+	props: {
+		linkType: {
+			type: [Number, String],
+			default() {
+				return 1
+			}
+		},
+		linkUrl: {
+			type: String,
+			default() {
+				return ''
+			}
+		},
 	},
 	mounted () {
     let href = window.location.href
@@ -62,8 +82,8 @@ export default {
 				consultId: this.consultId
 			}
 			duoduo.illnessShop(params).then(res => {
-				this.illnessShopList = res.data.list
-				this.doctorWjx = res.data.doctorWjx
+				this.illnessShopList = res.data.list || []
+				this.linkUrlData = res.data.linkUrlData
 			})
 		},
 		handleLink(url) {
