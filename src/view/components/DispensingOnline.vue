@@ -1,14 +1,14 @@
 <template>
   <div class="internet-peiyao-box">
 		<img 
-			v-if="linkType === 1"
+			v-if="linkType === 1 && (linkUrlData || linkUrl)"
 			src="../../assets/img/online-peiyao.png" 
 			alt="" 
 			class="peiyao-img"
-			@click="handleLink(linkUrl || linkUrlData)"
+			@click="handleLink(linkUrlData || linkUrl)"
 		>
 		<img 
-			v-if="linkType === 2"
+			v-if="linkType === 2 && linkUrl"
 			src="../../assets/img/health-shop.png" 
 			alt="" 
 			class="peiyao-img"
