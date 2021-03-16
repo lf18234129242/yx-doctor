@@ -38,9 +38,9 @@
       <p>病程</p>
       <input disabled type="text" v-model="illStepText" placeholder="点击选择病程" />
     </div>
-    <div class="cell-box" @click="showIllStep = true">
+    <div class="cell-box">
       <p>备注</p>
-      <input disabled type="text" v-model="filter.description" placeholder="请输入备注信息" />
+      <input type="text" v-model="filter.description" placeholder="请输入备注信息" />
     </div>
     <!-- 选择年龄弹出框 -->
     <van-popup v-model="show_age" round position="bottom">
