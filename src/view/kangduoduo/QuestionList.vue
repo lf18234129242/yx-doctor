@@ -105,31 +105,31 @@ export default {
 						consultId: item.consult_id
 					}
 				})
-			} else if (item.show_power === 2) {
-				this.costIntegral(item)
+			// } else if (item.show_power === 2) {
+			// 	this.costIntegral(item)
 			}
 		},
 		// 进入详情页消耗积分
-		costIntegral(item) {
-			let params = {
-				consultId: item.consult_id,
-				integral: 10,
-				token: this.token,
-				userId: this.userId,
-				type: 4
-			}
-			duoduo.userIntegralSave(params).then(res => {
-				if (res.data.code === 0) {
-					this.$router.push({
-						path: '/Chating',
-						query: {
-							token: this.token,
-							consultId: item.consult_id
-						}
-					})
-				}
-			})
-		},
+		// costIntegral(item) {
+		// 	let params = {
+		// 		consultId: item.consult_id,
+		// 		integral: 10,
+		// 		token: this.token,
+		// 		userId: this.userId,
+		// 		type: 4
+		// 	}
+		// 	duoduo.userIntegralSave(params).then(res => {
+		// 		if (res.data.code === 0) {
+		// 			this.$router.push({
+		// 				path: '/Chating',
+		// 				query: {
+		// 					token: this.token,
+		// 					consultId: item.consult_id
+		// 				}
+		// 			})
+		// 		}
+		// 	})
+		// },
 		putQuestion() {
 			this.$router.push({
 				path: '*',

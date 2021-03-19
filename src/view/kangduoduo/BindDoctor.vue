@@ -96,7 +96,7 @@ export default {
 		this.monitoring()
 		if (this.currentUserId != this.userId) {
 			this.usershareSave()
-			this.userIntegralSave()
+			// this.userIntegralSave()
 		}
 		Toast('谢谢你的助力！')
 	},
@@ -119,15 +119,15 @@ export default {
 			}
 			duoduo.monitoring(params).then(() => {})
 		},
-		userIntegralSave() {
-			let params = {
-				integral: 3,
-				token: this.token,
-				type: 1,
-				userId: this.userId
-			}
-			duoduo.userIntegralSave(params).then(() => {})
-		},
+		// userIntegralSave() {
+		// 	let params = {
+		// 		integral: 3,
+		// 		token: this.token,
+		// 		type: 1,
+		// 		userId: this.userId
+		// 	}
+		// 	duoduo.userIntegralSave(params).then(() => {})
+		// },
 		usershareSave() {
 			let params = {
 				doctorId: this.doctorId,

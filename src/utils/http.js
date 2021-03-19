@@ -178,13 +178,13 @@ export const duoduo = {
 		}
 		return Promise.reject(false)
 	},
-	userIntegralSave: async(params) => {
-		const res = await http(axios.post(api.userintegral_save, params))
-		if (res) {
-			return Promise.resolve(res)
-		}
-		return Promise.reject(false)
-	},
+	// userIntegralSave: async(params) => {
+	// 	const res = await http(axios.post(api.userintegral_save, params))
+	// 	if (res) {
+	// 		return Promise.resolve(res)
+	// 	}
+	// 	return Promise.reject(false)
+	// },
 	getQuestionInfo: async(params) => {
 		const res = await http(axios.post(api.question_info, params))
 		if (res) {
